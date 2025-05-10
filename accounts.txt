@@ -1,13 +1,7 @@
-=========================================
-ACCOUNT:1001|saif|saif|199701.0
-TRANSACTION:[2025-05-09 11:18:13] Initial deposit: 200000.0
+ACCOUNT:1001|saif|saif|300355.0
+TRANSACTION:[2025-05-10 11:37:40] Initial deposit: 300000.0
 
-TRANSACTION:[2025-05-09 11:18:39] Transferred to fasal: 299.0
-
-ACCOUNT:1002|fasal|fasal|200299.0
-TRANSACTION:[2025-05-09 11:18:21] Initial deposit: 200000.0
-
-TRANSACTION:[2025-05-09 11:18:39] Received from saif: 299.0
+TRANSACTION:[2025-05-10 11:39:20] Deposited: 288.0
 
 
 
