@@ -54,30 +54,40 @@ def update_account_data(account_data, username):
         updated_lines = []
         i = 0
         found = False
+
         while i < len(lines):
             if lines[i].startswith("ACCOUNT:") and f"|{username}|" in lines[i]:
                 found = True
+                # Replace account line
                 updated_lines.append(f"ACCOUNT:{account_data['account_number']}|{username}|{username}|{account_data['balance']}\n")
+                # Replace transaction lines
                 for txn in account_data['transactions']:
-                    updated_lines.append(f"{txn}\n")
-                while i < len(lines) and lines[i]!= "":
+                    updated_lines.append(f"{txn.strip()}\n")
+                # Skip old transaction lines
+                i += 1
+                while i < len(lines) and lines[i].startswith("TRANSACTION:"):
                     i += 1
-                updated_lines.append("\n")
+                # Skip any blank line after transaction
+                if i < len(lines) and lines[i].strip() == "":
+                    i += 1
+                updated_lines.append("\n")  # Add new separator
             else:
                 updated_lines.append(lines[i])
                 i += 1
 
+        # If account not found, add it
         if not found:
+            updated_lines.append("=========================================================\n")
             updated_lines.append(f"ACCOUNT:{account_data['account_number']}|{username}|{username}|{account_data['balance']}\n")
             for txn in account_data['transactions']:
-                updated_lines.append(f"{txn}\n")
+                updated_lines.append(f"{txn.strip()}\n")
             updated_lines.append("\n")
 
         with open("accounts.txt", "w") as file:
             file.writelines(updated_lines)
 
     except FileNotFoundError:
-        pass
+        print("Accounts file not found.")
 
 def create_user_account():
     username = input("Enter new username: ")
