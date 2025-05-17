@@ -58,24 +58,20 @@ def update_account_data(account_data, username):
         while i < len(lines):
             if lines[i].startswith("ACCOUNT:") and f"|{username}|" in lines[i]:
                 found = True
-                # Replace account line
+                
                 updated_lines.append(f"ACCOUNT:{account_data['account_number']}|{username}|{username}|{account_data['balance']}\n")
-                # Replace transaction lines
+            
                 for txn in account_data['transactions']:
                     updated_lines.append(f"{txn.strip()}\n")
-                # Skip old transaction lines
                 i += 1
                 while i < len(lines) and lines[i].startswith("TRANSACTION:"):
                     i += 1
-                # Skip any blank line after transaction
                 if i < len(lines) and lines[i].strip() == "":
                     i += 1
-                updated_lines.append("\n")  # Add new separator
+                updated_lines.append("\n")  
             else:
                 updated_lines.append(lines[i])
                 i += 1
-
-        # If account not found, add it
         if not found:
             updated_lines.append("=========================================================\n")
             updated_lines.append(f"ACCOUNT:{account_data['account_number']}|{username}|{username}|{account_data['balance']}\n")
@@ -88,6 +84,10 @@ def update_account_data(account_data, username):
 
     except FileNotFoundError:
         print("Accounts file not found.")
+                
+                
+
+        
 
 def create_user_account():
     username = input("Enter new username: ")
@@ -187,6 +187,11 @@ def withdraw(username):
     else:
         print("Account not found.")
 
+    if account_data['balance'] <5000:
+        print ("-----warning------\nyour account ammount too low ")
+        return
+    
+
 def check_balance(username):
     account_data = get_account_data(username)
     if account_data:
@@ -237,6 +242,7 @@ def login():
     admin_username = 'admin'
     admin_password = 'admin123'
 
+
     username = input("Username: ")
     password = input("Password: ")
 
@@ -258,9 +264,29 @@ def login():
         return None
     print("Invalid username or password.")
     return None
-                        
 
+def change_password(username):
+    username=input("enter your user name  ")
+    with open('users.txt','r') as file:
+            for line in file:
+                parts = line.split("|")
+                if len(parts) >= 2 and parts[0] == username:
+                    print('hi ',{username})
+            password = input('enter your curent password: ')
 
+    with open('users.txt','r') as file:
+            for line in file:
+                parts = line.strip().split('|')
+                if len(parts) >= 2 and parts[1] == password:
+                    new=input('enter your new password: ')
+                if new < len('6'):
+                    print('more than 6 ltr')
+                return
+            print('new password change succesfully :',{new})
+    with open('users.txt','w') as file:
+            file.write(f'{username}|{new}')
+    
+          
 def admin_menu():
     while True:
         print("\n wellcom admin ")
@@ -292,7 +318,8 @@ def user_menu(username):
         print("3. Check Balance")
         print("4. Transfer Funds")
         print("5. View Transaction History")
-        print("6. Logout")
+        print('6.change password')
+        print("7. Logout")
         print("===============================")
         choice = input("Enter choice: ")
 
@@ -307,6 +334,9 @@ def user_menu(username):
         elif choice == "5":
             view_transactions(username)
         elif choice == "6":
+            change_password(username,)
+           
+        elif choice=='7':
             print("Logging out...")
             break
         else:
@@ -335,3 +365,23 @@ if __name__ == "_main_":
 
 
 main()
+
+            
+                
+           
+                        
+                    
+                
+                    
+  
+                    
+        
+    
+
+
+
+
+    
+
+                        
+
